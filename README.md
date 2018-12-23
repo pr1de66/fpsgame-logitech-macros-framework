@@ -23,6 +23,6 @@
 7.载入框架文件：
 ```
 dofile("c:\\scripts\\framework.lua")
-```
+``` 
 
 8.
