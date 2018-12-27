@@ -167,6 +167,9 @@ end
 ---------------------------
 noWeapon = "clear"
 function initWeapon(weapon)
+    weapon.onWeapon = function ()
+        onWeapon(weapon)
+    end
     weapon.pdata = {}
     for shotTimes = 2 , weapon.ammo do
         local hchange = weapon.data[shotTimes-1][1] - weapon.data[shotTimes][1]
@@ -194,9 +197,6 @@ function onWeapon(weapon)
     end
 end
 
-function onCurrentWeapon()
-    onWeapon(config.currentWeapon)
-end
 
 --------------------------
 ----Global Configs--------
@@ -220,7 +220,7 @@ function _OnEvent(event,arg)
         end
     end
     if event == "MOUSE_BUTTON_PRESSED" and arg == 1 and config.currentWeapon ~= nil then
-        config.task = NewTask(onCurrentWeapon)
+        config.task = NewTask(config.currentWeapon.onWeapon)
         config.task.Start()
     end
 
@@ -228,4 +228,17 @@ function _OnEvent(event,arg)
         config.task.Destroy()
     end
 end
+
+function makeInexactWeapon(step)
+    local weap = {}
+    weap.onWeapon = function()
+        while true do
+            MoveMouseRelative(0,step)
+            TaskSleep(10)
+        end
+    end
+    return weap
+end
+
+
 
